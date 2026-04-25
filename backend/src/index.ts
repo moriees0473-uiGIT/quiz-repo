@@ -1,6 +1,7 @@
-const PORT = process.env.PORT || 3000; // Renderでは自動で10000番などが割り当てられます
+import express from 'express';
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// 重要: '0.0.0.0' を指定しないと外部からアクセスできない場合があります
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
