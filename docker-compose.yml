@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # フロントエンド側の設定 (React + Vite)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app/frontend
+    # パッケージをインストールし、Viteの開発サーバーを起動(--hostで外部からのアクセス許可)
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      # 手元のPCのコードとコンテナ内を同期（ホットリロードが効きます）
+      - .:/app
+    environment:
+      # Windows環境などでのホットリロードの安定性向上
+      - WATCHPACK_POLLING=true
+
+  # バックエンド側の設定 (Node.js + Express)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app/backend
+    # パッケージをインストールし、開発サーバーを起動
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      # 手元のPCのコードとコンテナ内を同期
+      - .:/app
