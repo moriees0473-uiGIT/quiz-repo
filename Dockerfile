@@ -10,15 +10,14 @@ RUN npm run build
 # --- Stage 2: Build & Run Backend ---
 FROM node:20-bookworm-slim
 WORKDIR /app/backend
-# SQLiteのビルドツール
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 COPY backend/package*.json ./
-RUN npm install --omit=dev
+RUN npm install
 COPY backend/ ./
 COPY shared/ ../shared/
+RUN npx tsc
 
-# ビルドしたフロントエンドをバックエンドの公開フォルダへコピー
 COPY --from=frontend-builder /app/frontend/dist ./public
 
 ENV NODE_ENV=production
